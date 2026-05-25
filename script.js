@@ -21,34 +21,38 @@ tabs.forEach((control) => {
 showRoute(location.hash.replace("#", "") || "home");
 
 const scenes = [
-  { time: "Год 0. Нулевая ночь", title: "Разлом над Кромом", place: "Кром, западная гряда", summary: "Первый разлом гасит небо над городом.", weather: "черный снег", tint: "#e44778", zones: [{ x: 0.26, y: 0.32, r: 0.08, label: "Разлом" }], pins: [{ x: 0.25, y: 0.34, label: "Кром", text: "Место первого знака." }, { x: 0.38, y: 0.55, label: "Пепельный порт", text: "Город у тёмной воды." }], models: [{ name: "Искатель", from: [0.16, 0.68], to: [0.25, 0.34], color: "#48d2c8", text: "Герой идёт к Кромскому разлому." }] },
-  { time: "Год 1. Первый зов", title: "Марш через Вересковую сушь", place: "Вересковая сушь", summary: "Караван идёт по высохшим степям.", weather: "пыльные молнии", tint: "#d9a84e", zones: [{ x: 0.43, y: 0.48, r: 0.09, label: "Сухой фронт" }], pins: [{ x: 0.44, y: 0.49, label: "Вересковая сушь", text: "Пограничная территория." }, { x: 0.58, y: 0.39, label: "Башня Слуха", text: "Станция ранних сигналов." }], models: [{ name: "Караван", from: [0.25, 0.34], to: [0.58, 0.39], color: "#48d2c8", text: "Движение каравана." }] },
-  { time: "Год 2. Пепельный дождь", title: "Падение южных маяков", place: "Пепельный порт", summary: "Береговая линия меняется.", weather: "соленый пепел", tint: "#b7303b", zones: [{ x: 0.38, y: 0.6, r: 0.07, label: "Затопление" }], pins: [{ x: 0.36, y: 0.61, label: "Пепельный порт", text: "Узел южного побережья." }, { x: 0.63, y: 0.64, label: "Мертвый пролив", text: "Граница конфликта." }], models: [{ name: "Сигнальный огонь", from: [0.36, 0.61], to: [0.63, 0.64], color: "#d9a84e", text: "Передача сигнала." }] },
-  { time: "Год 3. Глухие знамена", title: "Сбор на центральной площади", place: "Город Ним", summary: "Фракции сходятся в центре.", weather: "безветрие", tint: "#48d2c8", zones: [{ x: 0.51, y: 0.5, r: 0.09, label: "Площадь" }], pins: [{ x: 0.51, y: 0.5, label: "Ним", text: "Столица событий." }, { x: 0.73, y: 0.46, label: "Архив Тишины", text: "Архив хроник." }], models: [{ name: "Посланник", from: [0.58, 0.39], to: [0.51, 0.5], color: "#48d2c8", text: "Маршрут посланника." }] },
-  { time: "Год 4. Железная луна", title: "Ночь над Восточным кругом", place: "Восточный круг", summary: "Появляется восточный слой карты.", weather: "лунный гул", tint: "#8d63ff", zones: [{ x: 0.73, y: 0.34, r: 0.1, label: "Лунный круг" }], pins: [{ x: 0.73, y: 0.34, label: "Восточный круг", text: "Лунные механизмы." }, { x: 0.82, y: 0.56, label: "Сад Стекла", text: "Тихая долина." }], models: [{ name: "Лунный механизм", from: [0.73, 0.34], to: [0.82, 0.56], color: "#8d63ff", text: "Смена состояния мира." }] },
-  { time: "Год 5. Река без отражений", title: "Переправа через темную воду", place: "Река Ноль", summary: "Путь проходит по реке.", weather: "низкий туман", tint: "#48d2c8", zones: [{ x: 0.6, y: 0.66, r: 0.07, label: "Туман" }], pins: [{ x: 0.59, y: 0.66, label: "Река Ноль", text: "Речной маршрут." }, { x: 0.48, y: 0.78, label: "Остров Сна", text: "Промежуточная база." }], models: [{ name: "Лодка", from: [0.38, 0.6], to: [0.48, 0.78], color: "#48d2c8", text: "Переправа." }] },
-  { time: "Год 6. Последний костер", title: "Осада северного костра", place: "Северный костер", summary: "Финальная зона сжимается.", weather: "сухой мороз", tint: "#ff6a3d", zones: [{ x: 0.33, y: 0.21, r: 0.09, label: "Осада" }], pins: [{ x: 0.33, y: 0.21, label: "Северный костер", text: "Опорная точка." }, { x: 0.21, y: 0.48, label: "Старый тракт", text: "Старый путь." }], models: [{ name: "Страж", from: [0.51, 0.5], to: [0.33, 0.21], color: "#ff6a3d", text: "Оборона." }] },
-  { time: "Год 7. Черновечье", title: "Мир после последнего звука", place: "Черный горизонт", summary: "Линии сходятся в финале.", weather: "тишина", tint: "#f6f0e8", zones: [{ x: 0.5, y: 0.44, r: 0.12, label: "Черновечье" }], pins: [{ x: 0.5, y: 0.44, label: "Черный горизонт", text: "Финальная точка." }, { x: 0.69, y: 0.24, label: "Белый предел", text: "Тизер новой главы." }], models: [{ name: "Голос", from: [0.33, 0.21], to: [0.5, 0.44], color: "#f6f0e8", text: "Финальный путь." }] }
+  { time: "Год 0. Нулевая ночь", title: "Разлом над Кромом", place: "Кром, западная гряда", summary: "Первый разлом гасит небо над городом.", weather: "черный снег", tint: "#e44778", zones: [{ x: 0.26, y: 0.32, r: 0.08 }], pins: [{ x: 0.25, y: 0.34, label: "Кром", text: "Место первого знака." }, { x: 0.38, y: 0.55, label: "Пепельный порт", text: "Город у тёмной воды." }], models: [{ from: [0.16, 0.68], to: [0.25, 0.34], color: "#48d2c8" }] },
+  { time: "Год 1. Первый зов", title: "Марш через Вересковую сушь", place: "Вересковая сушь", summary: "Караван идёт по высохшим степям.", weather: "пыльные молнии", tint: "#d9a84e", zones: [{ x: 0.43, y: 0.48, r: 0.09 }], pins: [{ x: 0.44, y: 0.49, label: "Вересковая сушь", text: "Пограничная территория." }, { x: 0.58, y: 0.39, label: "Башня Слуха", text: "Станция ранних сигналов." }], models: [{ from: [0.25, 0.34], to: [0.58, 0.39], color: "#48d2c8" }] },
+  { time: "Год 2. Пепельный дождь", title: "Падение южных маяков", place: "Пепельный порт", summary: "Береговая линия меняется.", weather: "соленый пепел", tint: "#b7303b", zones: [{ x: 0.38, y: 0.6, r: 0.07 }], pins: [{ x: 0.36, y: 0.61, label: "Пепельный порт", text: "Узел южного побережья." }, { x: 0.63, y: 0.64, label: "Мертвый пролив", text: "Граница конфликта." }], models: [{ from: [0.36, 0.61], to: [0.63, 0.64], color: "#d9a84e" }] },
+  { time: "Год 3. Глухие знамена", title: "Сбор на центральной площади", place: "Город Ним", summary: "Фракции сходятся в центре.", weather: "безветрие", tint: "#48d2c8", zones: [{ x: 0.51, y: 0.5, r: 0.09 }], pins: [{ x: 0.51, y: 0.5, label: "Ним", text: "Столица событий." }, { x: 0.73, y: 0.46, label: "Архив Тишины", text: "Архив хроник." }], models: [{ from: [0.58, 0.39], to: [0.51, 0.5], color: "#48d2c8" }] },
+  { time: "Год 4. Железная луна", title: "Ночь над Восточным кругом", place: "Восточный круг", summary: "Появляется восточный слой карты.", weather: "лунный гул", tint: "#8d63ff", zones: [{ x: 0.73, y: 0.34, r: 0.1 }], pins: [{ x: 0.73, y: 0.34, label: "Восточный круг", text: "Лунные механизмы." }, { x: 0.82, y: 0.56, label: "Сад Стекла", text: "Тихая долина." }], models: [{ from: [0.73, 0.34], to: [0.82, 0.56], color: "#8d63ff" }] },
+  { time: "Год 5. Река без отражений", title: "Переправа через темную воду", place: "Река Ноль", summary: "Путь проходит по реке.", weather: "низкий туман", tint: "#48d2c8", zones: [{ x: 0.6, y: 0.66, r: 0.07 }], pins: [{ x: 0.59, y: 0.66, label: "Река Ноль", text: "Речной маршрут." }, { x: 0.48, y: 0.78, label: "Остров Сна", text: "Промежуточная база." }], models: [{ from: [0.38, 0.6], to: [0.48, 0.78], color: "#48d2c8" }] },
+  { time: "Год 6. Последний костер", title: "Осада северного костра", place: "Северный костер", summary: "Финальная зона сжимается.", weather: "сухой мороз", tint: "#ff6a3d", zones: [{ x: 0.33, y: 0.21, r: 0.09 }], pins: [{ x: 0.33, y: 0.21, label: "Северный костер", text: "Опорная точка." }, { x: 0.21, y: 0.48, label: "Старый тракт", text: "Старый путь." }], models: [{ from: [0.51, 0.5], to: [0.33, 0.21], color: "#ff6a3d" }] },
+  { time: "Год 7. Черновечье", title: "Мир после последнего звука", place: "Черный горизонт", summary: "Линии сходятся в финале.", weather: "тишина", tint: "#f6f0e8", zones: [{ x: 0.5, y: 0.44, r: 0.12 }], pins: [{ x: 0.5, y: 0.44, label: "Черный горизонт", text: "Финальная точка." }, { x: 0.69, y: 0.24, label: "Белый предел", text: "Тизер новой главы." }], models: [{ from: [0.33, 0.21], to: [0.5, 0.44], color: "#f6f0e8" }] }
 ];
 
 const mapNodes = [
-  { id: "krom", x: 0.25, y: 0.34, label: "Кром" },
-  { id: "port", x: 0.36, y: 0.61, label: "Пепельный порт" },
-  { id: "nim", x: 0.51, y: 0.5, label: "Ним" },
-  { id: "east", x: 0.73, y: 0.34, label: "Восточный круг" },
-  { id: "north", x: 0.33, y: 0.21, label: "Северный костер" },
-  { id: "river", x: 0.59, y: 0.66, label: "Река Ноль" },
-  { id: "horizon", x: 0.5, y: 0.44, label: "Черный горизонт" }
+  { id: "krom", x: 0.25, y: 0.34 },
+  { id: "port", x: 0.36, y: 0.61 },
+  { id: "nim", x: 0.51, y: 0.5 },
+  { id: "east", x: 0.73, y: 0.34 },
+  { id: "north", x: 0.33, y: 0.21 },
+  { id: "river", x: 0.59, y: 0.66 },
+  { id: "horizon", x: 0.5, y: 0.44 },
+  { id: "glass", x: 0.82, y: 0.56 },
+  { id: "island", x: 0.48, y: 0.78 }
 ];
 
 const mapPaths = [
-  ["krom", "nim"],
-  ["krom", "north"],
-  ["nim", "east"],
-  ["nim", "port"],
-  ["port", "river"],
-  ["river", "horizon"],
-  ["north", "horizon"]
+  ["krom", "north", -10],
+  ["krom", "nim", 6],
+  ["nim", "horizon", -5],
+  ["nim", "east", -8],
+  ["east", "glass", 10],
+  ["nim", "port", 12],
+  ["port", "river", 5],
+  ["river", "island", 8],
+  ["horizon", "north", -8]
 ];
 
 const canvas = document.getElementById("loreCanvas");
@@ -63,6 +67,8 @@ const nextScene = document.getElementById("nextScene");
 
 const mapImage = new Image();
 mapImage.src = "assets/world-map.jpg";
+const riderImage = new Image();
+riderImage.src = "assets/player-knight.png";
 
 let sceneIndex = 0;
 let canvasBox = canvas.getBoundingClientRect();
@@ -82,22 +88,17 @@ function resizeCanvas() {
 const point = (x, y) => [x * canvasBox.width, y * canvasBox.height];
 
 function drawFallbackSea() {
-  const w = canvasBox.width;
-  const h = canvasBox.height;
-  const sea = ctx.createLinearGradient(0, 0, 0, h);
+  const sea = ctx.createLinearGradient(0, 0, 0, canvasBox.height);
   sea.addColorStop(0, "#0c2f4a");
   sea.addColorStop(1, "#061725");
   ctx.fillStyle = sea;
-  ctx.fillRect(0, 0, w, h);
+  ctx.fillRect(0, 0, canvasBox.width, canvasBox.height);
 }
 
 function drawMapImage() {
-  if (mapImage.complete && mapImage.naturalWidth > 0) {
-    ctx.drawImage(mapImage, 0, 0, canvasBox.width, canvasBox.height);
-  } else {
-    drawFallbackSea();
-  }
-  ctx.fillStyle = "rgba(4, 10, 18, 0.22)";
+  if (mapImage.complete && mapImage.naturalWidth > 0) ctx.drawImage(mapImage, 0, 0, canvasBox.width, canvasBox.height);
+  else drawFallbackSea();
+  ctx.fillStyle = "rgba(4, 10, 18, 0.15)";
   ctx.fillRect(0, 0, canvasBox.width, canvasBox.height);
 }
 
@@ -106,20 +107,36 @@ function nodeById(id) {
 }
 
 function drawMapPaths() {
-  ctx.lineWidth = 2.5;
-  ctx.strokeStyle = "rgba(245, 221, 156, 0.62)";
-  mapPaths.forEach(([from, to]) => {
+  ctx.lineCap = "round";
+  mapPaths.forEach(([from, to, curve]) => {
     const a = nodeById(from);
     const b = nodeById(to);
     if (!a || !b) return;
     const [ax, ay] = point(a.x, a.y);
     const [bx, by] = point(b.x, b.y);
-    const mx = (ax + bx) / 2;
-    const my = (ay + by) / 2 - 24;
+    const dx = bx - ax;
+    const dy = by - ay;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    const mx = (ax + bx) * 0.5 + nx * curve;
+    const my = (ay + by) * 0.5 + ny * curve;
+
+    ctx.strokeStyle = "rgba(58, 37, 17, 0.7)";
+    ctx.lineWidth = 7;
     ctx.beginPath();
     ctx.moveTo(ax, ay);
     ctx.quadraticCurveTo(mx, my, bx, by);
     ctx.stroke();
+
+    ctx.setLineDash([14, 10]);
+    ctx.strokeStyle = "rgba(245, 221, 156, 0.95)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.quadraticCurveTo(mx, my, bx, by);
+    ctx.stroke();
+    ctx.setLineDash([]);
   });
 }
 
@@ -154,7 +171,7 @@ function drawPins(scene) {
   });
 }
 
-function drawPlayerModel(scene) {
+function drawKnight(scene) {
   const model = scene.models[0];
   if (!model) return;
   const t = (Math.sin((performance.now() - animationStart) / 900) + 1) / 2;
@@ -162,36 +179,24 @@ function drawPlayerModel(scene) {
   const [tx, ty] = point(model.to[0], model.to[1]);
   const x = sx + (tx - sx) * t;
   const y = sy + (ty - sy) * t;
+  const angle = Math.atan2(ty - sy, tx - sx) + Math.PI / 2;
 
-  ctx.fillStyle = "rgba(0,0,0,0.35)";
-  ctx.beginPath();
-  ctx.ellipse(x, y + 15, 16, 7, 0, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
 
-  ctx.fillStyle = "#efe4cf";
-  ctx.beginPath();
-  ctx.arc(x, y - 10, 6, 0, Math.PI * 2);
-  ctx.fill();
+  if (riderImage.complete && riderImage.naturalWidth > 0) {
+    const h = 98;
+    const w = (riderImage.naturalWidth / riderImage.naturalHeight) * h;
+    ctx.drawImage(riderImage, -w / 2, -h / 2, w, h);
+  } else {
+    ctx.fillStyle = "rgba(239, 228, 207, 0.92)";
+    ctx.beginPath();
+    ctx.arc(0, -10, 8, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-  ctx.strokeStyle = "#d4bb93";
-  ctx.lineWidth = 4;
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  ctx.moveTo(x, y - 4);
-  ctx.lineTo(x, y + 10);
-  ctx.moveTo(x - 8, y + 3);
-  ctx.lineTo(x + 8, y + 3);
-  ctx.moveTo(x, y + 10);
-  ctx.lineTo(x - 7, y + 20);
-  ctx.moveTo(x, y + 10);
-  ctx.lineTo(x + 7, y + 20);
-  ctx.stroke();
-
-  ctx.strokeStyle = model.color;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(x, y + 2, 18, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.restore();
 }
 
 function draw() {
@@ -203,7 +208,7 @@ function draw() {
   drawMapPaths();
   drawZone(scene, pulse);
   drawPins(scene);
-  drawPlayerModel(scene);
+  drawKnight(scene);
   startRenderLoop();
 }
 
@@ -283,6 +288,7 @@ prevScene.addEventListener("click", () => setScene(sceneIndex - 1));
 nextScene.addEventListener("click", () => setScene(sceneIndex + 1));
 window.addEventListener("resize", resizeCanvas);
 mapImage.addEventListener("load", startRenderLoop);
+riderImage.addEventListener("load", startRenderLoop);
 
 buildTicks();
 renderScene();
