@@ -37,7 +37,15 @@ const mapNodes = [
   { id: "horizon", x: 0.5, y: 0.44 }, { id: "glass", x: 0.82, y: 0.56 }, { id: "island", x: 0.48, y: 0.78 }
 ];
 
-const mapPaths = [["krom", "north", -10], ["krom", "nim", 6], ["nim", "horizon", -5], ["nim", "east", -8], ["east", "glass", 10], ["nim", "port", 12], ["port", "river", 5], ["river", "island", 8], ["horizon", "north", -8]];
+const mapPaths = [
+  [[0.25, 0.34], [0.58, 0.39], 8],
+  [[0.58, 0.39], [0.63, 0.64], 10],
+  [[0.63, 0.64], [0.51, 0.5], -8],
+  [[0.51, 0.5], [0.82, 0.56], 12],
+  [[0.82, 0.56], [0.48, 0.78], -10],
+  [[0.48, 0.78], [0.33, 0.21], 14],
+  [[0.33, 0.21], [0.5, 0.44], -10]
+];
 
 const canvas = document.getElementById("loreCanvas");
 const ctx = canvas.getContext("2d");
@@ -107,18 +115,41 @@ function drawMapImage() {
 
 function nodeById(id) { return mapNodes.find((n) => n.id === id); }
 
-function drawMapPaths() {
+function drawMapPaths(progressIndex, transitionT) {
   ctx.lineCap = "round";
-  mapPaths.forEach(([from, to, curve]) => {
-    const a = nodeById(from); const b = nodeById(to); if (!a || !b) return;
-    const [ax, ay] = point(a.x, a.y); const [bx, by] = point(b.x, b.y);
-    const dx = bx - ax; const dy = by - ay; const len = Math.hypot(dx, dy) || 1;
-    const nx = -dy / len; const ny = dx / len;
-    const mx = (ax + bx) * 0.5 + nx * curve; const my = (ay + by) * 0.5 + ny * curve;
-    ctx.strokeStyle = "rgba(58, 37, 17, 0.7)"; ctx.lineWidth = 7;
-    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo(mx, my, bx, by); ctx.stroke();
-    ctx.setLineDash([14, 10]); ctx.strokeStyle = "rgba(245, 221, 156, 0.95)"; ctx.lineWidth = 4;
-    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo(mx, my, bx, by); ctx.stroke();
+  const maxVisible = Math.max(0, progressIndex - 1 + transitionT);
+
+  mapPaths.forEach(([from, to, curve], idx) => {
+    const visiblePart = Math.max(0, Math.min(1, maxVisible - idx));
+    if (visiblePart <= 0) return;
+
+    const [ax, ay] = point(from[0], from[1]);
+    const [bx, by] = point(to[0], to[1]);
+    const dx = bx - ax;
+    const dy = by - ay;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    const mx = (ax + bx) * 0.5 + nx * curve;
+    const my = (ay + by) * 0.5 + ny * curve;
+
+    const ex = (1 - visiblePart) * (1 - visiblePart) * ax + 2 * (1 - visiblePart) * visiblePart * mx + visiblePart * visiblePart * bx;
+    const ey = (1 - visiblePart) * (1 - visiblePart) * ay + 2 * (1 - visiblePart) * visiblePart * my + visiblePart * visiblePart * by;
+
+    ctx.strokeStyle = "rgba(58, 37, 17, 0.7)";
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.quadraticCurveTo(mx, my, ex, ey);
+    ctx.stroke();
+
+    ctx.setLineDash([14, 10]);
+    ctx.strokeStyle = "rgba(245, 221, 156, 0.95)";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.quadraticCurveTo(mx, my, ex, ey);
+    ctx.stroke();
     ctx.setLineDash([]);
   });
 }
@@ -149,11 +180,10 @@ function getModelPosition() {
   const [endX, endY] = point(toModel.to[0], toModel.to[1]);
   const elapsed = performance.now() - transitionStart;
   const t = Math.max(0, Math.min(1, elapsed / transitionDuration));
-  return { x: startX + (endX - startX) * t, y: startY + (endY - startY) * t, angle: Math.atan2(endY - startY, endX - startX) + Math.PI / 2 };
+  return { x: startX + (endX - startX) * t, y: startY + (endY - startY) * t, angle: Math.atan2(endY - startY, endX - startX) + Math.PI / 2, t };
 }
 
-function drawKnight() {
-  const pos = getModelPosition();
+function drawKnight(pos) {
   ctx.save(); ctx.translate(pos.x, pos.y); ctx.rotate(pos.angle);
   const sprite = riderProcessed || riderImage;
   if (sprite && sprite.width > 0) {
@@ -169,8 +199,13 @@ function draw() {
   frameId = null;
   if (!canvasBox.width || !canvasBox.height) return;
   const scene = scenes[sceneIndex];
+  const modelPos = getModelPosition();
   const pulse = (Math.sin((performance.now() - transitionStart) / 540) + 1) / 2;
-  drawMapImage(); drawMapPaths(); drawZone(scene, pulse); drawPins(scene); drawKnight();
+  drawMapImage();
+  drawMapPaths(sceneIndex, modelPos.t);
+  drawZone(scene, pulse);
+  drawPins(scene);
+  drawKnight(modelPos);
   startRenderLoop();
 }
 
