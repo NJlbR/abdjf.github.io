@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Черновечье</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header" aria-label="Основная навигация">
+      <a class="brand" href="#home" data-route="home">Черновечье</a>
+      <nav class="tabs" aria-label="Разделы сайта">
+        <button class="tab is-active" type="button" data-route="home">Главная</button>
+        <button class="tab" type="button" data-route="map">Карта мира</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="view view-home is-visible" id="home" aria-labelledby="home-title">
+        <div class="hero-media" aria-hidden="true"></div>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="kicker">грядущий релиз</p>
+          <h1 id="home-title">Черновечье. Скоро.</h1>
+          <div class="release-grid" aria-label="Информация о релизе">
+            <section class="release-panel">
+              <div class="panel-heading">
+                <span>трек-лист</span>
+                <strong>8 фрагментов лора</strong>
+              </div>
+              <ol class="track-list">
+                <li><span>01</span>Порог черного века</li>
+                <li><span>02</span>Пепельный город</li>
+                <li><span>03</span>Северный обет</li>
+                <li><span>04</span>Река без отражений</li>
+                <li><span>05</span>Площадь глухих знамен</li>
+                <li><span>06</span>Сон под железной луной</li>
+                <li><span>07</span>Последний костер</li>
+                <li><span>08</span>Черновечье</li>
+              </ol>
+            </section>
+
+            <section class="release-panel links-panel">
+              <div class="panel-heading">
+                <span>площадки</span>
+                <strong>ссылки появятся к релизу</strong>
+              </div>
+              <div class="platform-links">
+                <a href="#" aria-label="Яндекс Музыка">Яндекс Музыка</a>
+                <a href="#" aria-label="Spotify">Spotify</a>
+                <a href="#" aria-label="Сбер Звук">Сбер Звук</a>
+                <a href="#" aria-label="VK Музыка">VK Музыка</a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="view view-map" id="map" aria-labelledby="map-title">
+        <div class="map-shell">
+          <aside class="map-sidebar">
+            <p class="kicker">интерактивный лор</p>
+            <h2 id="map-title">Карта мира альбома</h2>
+            <div class="scene-card" id="sceneCard" aria-live="polite"></div>
+            <div class="legend">
+              <span><i class="legend-pin"></i> место действия</span>
+              <span><i class="legend-model"></i> движущаяся модель</span>
+              <span><i class="legend-zone"></i> изменяемая зона</span>
+            </div>
+          </aside>
+
+          <section class="map-stage" aria-label="Интерактивная карта Черновечья">
+            <canvas id="loreCanvas" width="1400" height="860"></canvas>
+            <div class="map-tooltip" id="mapTooltip" role="status"></div>
+            <div class="timeline-panel">
+              <div class="timeline-top">
+                <button class="icon-button" type="button" id="prevScene" aria-label="Предыдущая точка времени">‹</button>
+                <div>
+                  <span class="timeline-label">точка времени</span>
+                  <strong id="timelineName"></strong>
+                </div>
+                <button class="icon-button" type="button" id="nextScene" aria-label="Следующая точка времени">›</button>
+              </div>
+              <input id="timeSlider" type="range" min="0" max="7" step="1" value="0" aria-label="Ползунок времени">
+              <div class="ticks" id="ticks"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
