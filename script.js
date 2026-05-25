@@ -1,5 +1,5 @@
 
-```javascript
+
 const tabs = document.querySelectorAll("[data-route]");
 const views = document.querySelectorAll(".view");
 
