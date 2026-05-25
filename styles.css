@@ -259,45 +259,46 @@ h2 {
 .map-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 22px;
+  gap: 12px;
+  padding: 20px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(18, 17, 20, 0.84);
+  background: rgba(13, 12, 15, 0.74);
 }
 
 .scene-card {
   display: grid;
-  gap: 14px;
-  padding-top: 6px;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(246, 240, 232, 0.16);
+  border-radius: 8px;
+  background: rgba(246, 240, 232, 0.05);
 }
 
 .scene-card time {
   color: var(--gold);
-  font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
+  font-size: 12px;
   text-transform: uppercase;
 }
 
 .scene-card h3 {
   margin: 0;
-  font-size: 22px;
-  line-height: 1.14;
+  font-size: 18px;
 }
 
 .scene-card p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.45;
 }
 
 .scene-meta {
   display: grid;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid rgba(246, 240, 232, 0.12);
-  border-radius: 8px;
-  background: rgba(246, 240, 232, 0.05);
+  grid-template-columns: auto 1fr;
+  gap: 6px 10px;
+  align-items: baseline;
+  margin-top: 4px;
 }
 
 .scene-meta span {
@@ -306,23 +307,27 @@ h2 {
   text-transform: uppercase;
 }
 
+.scene-meta strong {
+  font-size: 13px;
+}
+
 .legend {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
   color: var(--muted);
   font-size: 13px;
 }
 
 .legend span {
-  display: flex;
+  display: inline-flex;
+  gap: 8px;
   align-items: center;
-  gap: 10px;
 }
 
 .legend i {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
 }
 
@@ -343,8 +348,9 @@ h2 {
   min-height: 640px;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--water);
+  border-radius: 10px;
+  background: radial-gradient(circle at 70% 10%, rgba(130, 168, 183, 0.08), transparent 40%), var(--water);
+  box-shadow: inset 0 0 60px rgba(3, 8, 12, 0.55);
 }
 
 #loreCanvas {
@@ -437,7 +443,32 @@ h2 {
 
 #timeSlider {
   width: 100%;
-  accent-color: var(--accent);
+  height: 8px;
+  border-radius: 999px;
+  appearance: none;
+  background: linear-gradient(90deg, rgba(228,71,120,0.82), rgba(72,210,200,0.84));
+  outline: none;
+}
+
+#timeSlider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.8);
+  background: #131519;
+  box-shadow: 0 0 0 4px rgba(246, 240, 232, 0.22);
+  cursor: pointer;
+}
+
+#timeSlider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.8);
+  background: #131519;
+  box-shadow: 0 0 0 4px rgba(246, 240, 232, 0.22);
+  cursor: pointer;
 }
 
 .ticks {
@@ -450,12 +481,13 @@ h2 {
 
 .ticks button {
   min-width: 0;
-  padding: 0;
-  border: 0;
+  padding: 6px 4px;
+  border: 1px solid rgba(246, 240, 232, 0.1);
+  border-radius: 6px;
   color: inherit;
-  background: transparent;
+  background: rgba(246,240,232,0.03);
   cursor: pointer;
-  text-align: left;
+  text-align: center;
 }
 
 .ticks button.is-active {
