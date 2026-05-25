@@ -32,28 +32,12 @@ const scenes = [
 ];
 
 const mapNodes = [
-  { id: "krom", x: 0.25, y: 0.34 },
-  { id: "port", x: 0.36, y: 0.61 },
-  { id: "nim", x: 0.51, y: 0.5 },
-  { id: "east", x: 0.73, y: 0.34 },
-  { id: "north", x: 0.33, y: 0.21 },
-  { id: "river", x: 0.59, y: 0.66 },
-  { id: "horizon", x: 0.5, y: 0.44 },
-  { id: "glass", x: 0.82, y: 0.56 },
-  { id: "island", x: 0.48, y: 0.78 }
+  { id: "krom", x: 0.25, y: 0.34 }, { id: "port", x: 0.36, y: 0.61 }, { id: "nim", x: 0.51, y: 0.5 },
+  { id: "east", x: 0.73, y: 0.34 }, { id: "north", x: 0.33, y: 0.21 }, { id: "river", x: 0.59, y: 0.66 },
+  { id: "horizon", x: 0.5, y: 0.44 }, { id: "glass", x: 0.82, y: 0.56 }, { id: "island", x: 0.48, y: 0.78 }
 ];
 
-const mapPaths = [
-  ["krom", "north", -10],
-  ["krom", "nim", 6],
-  ["nim", "horizon", -5],
-  ["nim", "east", -8],
-  ["east", "glass", 10],
-  ["nim", "port", 12],
-  ["port", "river", 5],
-  ["river", "island", 8],
-  ["horizon", "north", -8]
-];
+const mapPaths = [["krom", "north", -10], ["krom", "nim", 6], ["nim", "horizon", -5], ["nim", "east", -8], ["east", "glass", 10], ["nim", "port", 12], ["port", "river", 5], ["river", "island", 8], ["horizon", "north", -8]];
 
 const canvas = document.getElementById("loreCanvas");
 const ctx = canvas.getContext("2d");
@@ -71,10 +55,12 @@ const riderImage = new Image();
 riderImage.src = "assets/player-knight.png";
 
 let sceneIndex = 0;
+let previousSceneIndex = 0;
+let transitionStart = performance.now();
+const transitionDuration = 700;
 let canvasBox = canvas.getBoundingClientRect();
 let frameId = null;
 let activeHover = null;
-let animationStart = performance.now();
 
 function resizeCanvas() {
   canvasBox = canvas.getBoundingClientRect();
@@ -87,55 +73,31 @@ function resizeCanvas() {
 
 const point = (x, y) => [x * canvasBox.width, y * canvasBox.height];
 
-function drawFallbackSea() {
-  const sea = ctx.createLinearGradient(0, 0, 0, canvasBox.height);
-  sea.addColorStop(0, "#0c2f4a");
-  sea.addColorStop(1, "#061725");
-  ctx.fillStyle = sea;
-  ctx.fillRect(0, 0, canvasBox.width, canvasBox.height);
-}
-
 function drawMapImage() {
   if (mapImage.complete && mapImage.naturalWidth > 0) ctx.drawImage(mapImage, 0, 0, canvasBox.width, canvasBox.height);
-  else drawFallbackSea();
+  else {
+    const sea = ctx.createLinearGradient(0, 0, 0, canvasBox.height);
+    sea.addColorStop(0, "#0c2f4a"); sea.addColorStop(1, "#061725");
+    ctx.fillStyle = sea; ctx.fillRect(0, 0, canvasBox.width, canvasBox.height);
+  }
   ctx.fillStyle = "rgba(4, 10, 18, 0.15)";
   ctx.fillRect(0, 0, canvasBox.width, canvasBox.height);
 }
 
-function nodeById(id) {
-  return mapNodes.find((n) => n.id === id);
-}
+function nodeById(id) { return mapNodes.find((n) => n.id === id); }
 
 function drawMapPaths() {
   ctx.lineCap = "round";
   mapPaths.forEach(([from, to, curve]) => {
-    const a = nodeById(from);
-    const b = nodeById(to);
-    if (!a || !b) return;
-    const [ax, ay] = point(a.x, a.y);
-    const [bx, by] = point(b.x, b.y);
-    const dx = bx - ax;
-    const dy = by - ay;
-    const len = Math.hypot(dx, dy) || 1;
-    const nx = -dy / len;
-    const ny = dx / len;
-    const mx = (ax + bx) * 0.5 + nx * curve;
-    const my = (ay + by) * 0.5 + ny * curve;
-
-    ctx.strokeStyle = "rgba(58, 37, 17, 0.7)";
-    ctx.lineWidth = 7;
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.quadraticCurveTo(mx, my, bx, by);
-    ctx.stroke();
-
-    ctx.setLineDash([14, 10]);
-    ctx.strokeStyle = "rgba(245, 221, 156, 0.95)";
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.quadraticCurveTo(mx, my, bx, by);
-    ctx.stroke();
+    const a = nodeById(from); const b = nodeById(to); if (!a || !b) return;
+    const [ax, ay] = point(a.x, a.y); const [bx, by] = point(b.x, b.y);
+    const dx = bx - ax; const dy = by - ay; const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len; const ny = dx / len;
+    const mx = (ax + bx) * 0.5 + nx * curve; const my = (ay + by) * 0.5 + ny * curve;
+    ctx.strokeStyle = "rgba(58, 37, 17, 0.7)"; ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo(mx, my, bx, by); ctx.stroke();
+    ctx.setLineDash([14, 10]); ctx.strokeStyle = "rgba(245, 221, 156, 0.95)"; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo(mx, my, bx, by); ctx.stroke();
     ctx.setLineDash([]);
   });
 }
@@ -145,57 +107,39 @@ function drawZone(scene, pulse) {
     const [x, y] = point(zone.x, zone.y);
     const radius = zone.r * Math.min(canvasBox.width, canvasBox.height) * (1 + pulse * 0.05);
     const glow = ctx.createRadialGradient(x, y, radius * 0.1, x, y, radius);
-    glow.addColorStop(0, `${scene.tint}aa`);
-    glow.addColorStop(1, `${scene.tint}00`);
-    ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fill();
+    glow.addColorStop(0, `${scene.tint}aa`); glow.addColorStop(1, `${scene.tint}00`);
+    ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill();
   });
 }
 
 function drawPins(scene) {
   scene.pins.forEach((pin) => {
     const [x, y] = point(pin.x, pin.y);
-    ctx.fillStyle = "rgba(12, 11, 9, 0.9)";
-    ctx.beginPath();
-    ctx.arc(x, y, 11, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#f4c66d";
-    ctx.beginPath();
-    ctx.arc(x, y, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "rgba(246, 240, 232, 0.92)";
-    ctx.font = "700 11px Segoe UI";
-    ctx.fillText(pin.label, x + 12, y - 10);
+    ctx.fillStyle = "rgba(12, 11, 9, 0.9)"; ctx.beginPath(); ctx.arc(x, y, 11, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#f4c66d"; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "rgba(246, 240, 232, 0.92)"; ctx.font = "700 11px Segoe UI"; ctx.fillText(pin.label, x + 12, y - 10);
   });
 }
 
-function drawKnight(scene) {
-  const model = scene.models[0];
-  if (!model) return;
-  const t = (Math.sin((performance.now() - animationStart) / 900) + 1) / 2;
-  const [sx, sy] = point(model.from[0], model.from[1]);
-  const [tx, ty] = point(model.to[0], model.to[1]);
-  const x = sx + (tx - sx) * t;
-  const y = sy + (ty - sy) * t;
-  const angle = Math.atan2(ty - sy, tx - sx) + Math.PI / 2;
+function getModelPosition() {
+  const fromModel = scenes[previousSceneIndex].models[0] || scenes[sceneIndex].models[0];
+  const toModel = scenes[sceneIndex].models[0] || fromModel;
+  const [startX, startY] = point(fromModel.to[0], fromModel.to[1]);
+  const [endX, endY] = point(toModel.to[0], toModel.to[1]);
+  const elapsed = performance.now() - transitionStart;
+  const t = Math.max(0, Math.min(1, elapsed / transitionDuration));
+  return { x: startX + (endX - startX) * t, y: startY + (endY - startY) * t, angle: Math.atan2(endY - startY, endX - startX) + Math.PI / 2 };
+}
 
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(angle);
-
+function drawKnight() {
+  const pos = getModelPosition();
+  ctx.save(); ctx.translate(pos.x, pos.y); ctx.rotate(pos.angle);
   if (riderImage.complete && riderImage.naturalWidth > 0) {
-    const h = 98;
-    const w = (riderImage.naturalWidth / riderImage.naturalHeight) * h;
+    const h = 98; const w = (riderImage.naturalWidth / riderImage.naturalHeight) * h;
     ctx.drawImage(riderImage, -w / 2, -h / 2, w, h);
   } else {
-    ctx.fillStyle = "rgba(239, 228, 207, 0.92)";
-    ctx.beginPath();
-    ctx.arc(0, -10, 8, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.fillStyle = "rgba(239, 228, 207, 0.92)"; ctx.beginPath(); ctx.arc(0, -10, 8, 0, Math.PI * 2); ctx.fill();
   }
-
   ctx.restore();
 }
 
@@ -203,18 +147,12 @@ function draw() {
   frameId = null;
   if (!canvasBox.width || !canvasBox.height) return;
   const scene = scenes[sceneIndex];
-  const pulse = (Math.sin((performance.now() - animationStart) / 540) + 1) / 2;
-  drawMapImage();
-  drawMapPaths();
-  drawZone(scene, pulse);
-  drawPins(scene);
-  drawKnight(scene);
+  const pulse = (Math.sin((performance.now() - transitionStart) / 540) + 1) / 2;
+  drawMapImage(); drawMapPaths(); drawZone(scene, pulse); drawPins(scene); drawKnight();
   startRenderLoop();
 }
 
-function startRenderLoop() {
-  if (frameId === null) frameId = requestAnimationFrame(draw);
-}
+function startRenderLoop() { if (frameId === null) frameId = requestAnimationFrame(draw); }
 
 function renderScene() {
   const scene = scenes[sceneIndex];
@@ -225,8 +163,11 @@ function renderScene() {
 }
 
 function setScene(index) {
-  sceneIndex = Math.max(0, Math.min(scenes.length - 1, index));
-  animationStart = performance.now();
+  const clamped = Math.max(0, Math.min(scenes.length - 1, index));
+  if (clamped === sceneIndex) return;
+  previousSceneIndex = sceneIndex;
+  sceneIndex = clamped;
+  transitionStart = performance.now();
   renderScene();
 }
 
@@ -234,25 +175,19 @@ function buildTicks() {
   ticks.innerHTML = "";
   scenes.forEach((scene, index) => {
     const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = `${index + 1}`;
+    button.type = "button"; button.textContent = `${index + 1}`;
     button.title = `${scene.time} — ${scene.title}`;
     button.addEventListener("click", () => setScene(index));
     ticks.appendChild(button);
   });
 }
 
-function getInteractiveItems(scene) {
-  return scene.pins.map((pin) => ({ ...pin, type: "Город", radius: 18 }));
-}
+function getInteractiveItems(scene) { return scene.pins.map((pin) => ({ ...pin, type: "Город", radius: 18 })); }
 
 function findHover(clientX, clientY) {
-  const rect = canvas.getBoundingClientRect();
-  const localX = clientX - rect.left;
-  const localY = clientY - rect.top;
+  const rect = canvas.getBoundingClientRect(); const localX = clientX - rect.left; const localY = clientY - rect.top;
   return getInteractiveItems(scenes[sceneIndex]).find((item) => {
-    const [x, y] = point(item.x, item.y);
-    return Math.hypot(localX - x, localY - y) < item.radius;
+    const [x, y] = point(item.x, item.y); return Math.hypot(localX - x, localY - y) < item.radius;
   });
 }
 
@@ -266,22 +201,11 @@ function showTooltip(item, clientX, clientY) {
 
 canvas.addEventListener("mousemove", (event) => {
   const item = findHover(event.clientX, event.clientY);
-  if (item) {
-    activeHover = item;
-    showTooltip(item, event.clientX, event.clientY);
-    canvas.style.cursor = "pointer";
-  } else {
-    activeHover = null;
-    tooltip.classList.remove("is-visible");
-    canvas.style.cursor = "crosshair";
-  }
+  if (item) { activeHover = item; showTooltip(item, event.clientX, event.clientY); canvas.style.cursor = "pointer"; }
+  else { activeHover = null; tooltip.classList.remove("is-visible"); canvas.style.cursor = "crosshair"; }
 });
 
-canvas.addEventListener("click", (event) => {
-  const item = activeHover || findHover(event.clientX, event.clientY);
-  if (item) showTooltip(item, event.clientX, event.clientY);
-});
-
+canvas.addEventListener("click", (event) => { const item = activeHover || findHover(event.clientX, event.clientY); if (item) showTooltip(item, event.clientX, event.clientY); });
 canvas.addEventListener("mouseleave", () => tooltip.classList.remove("is-visible"));
 slider.addEventListener("input", (event) => setScene(Number(event.target.value)));
 prevScene.addEventListener("click", () => setScene(sceneIndex - 1));
