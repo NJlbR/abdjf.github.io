@@ -438,8 +438,8 @@ h2 {
 
 #timeSlider {
   --thumb-size: 20px;
-  width: calc(100% - var(--thumb-size));
-  margin: 0 calc(var(--thumb-size) / 2);
+  width: 100%;
+  margin: 0;
   height: 8px;
   border-radius: 999px;
   appearance: none;
@@ -469,24 +469,25 @@ h2 {
 }
 
 .ticks {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  width: calc(100% - 20px);
-  margin: 0 10px;
-  gap: 0;
+  --thumb-size: 20px;
+  position: relative;
+  height: 24px;
   color: var(--muted);
   font-size: 11px;
 }
 
 .ticks button {
-  min-width: 0;
+  position: absolute;
+  top: 0;
+  left: calc((var(--i) / var(--count)) * (100% - var(--thumb-size)) + (var(--thumb-size) / 2));
+  transform: translateX(-50%);
+  min-width: 22px;
   padding: 8px 0 0;
   border: 0;
   color: inherit;
   background: transparent;
   cursor: pointer;
   text-align: center;
-  position: relative;
 }
 
 .ticks button::before {
