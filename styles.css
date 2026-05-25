@@ -259,46 +259,45 @@ h2 {
 .map-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px;
+  gap: 18px;
+  padding: 22px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(13, 12, 15, 0.74);
+  background: rgba(18, 17, 20, 0.84);
 }
 
 .scene-card {
   display: grid;
-  gap: 8px;
-  padding: 14px;
-  border: 1px solid rgba(246, 240, 232, 0.16);
-  border-radius: 8px;
-  background: rgba(246, 240, 232, 0.05);
+  gap: 14px;
+  padding-top: 6px;
 }
 
 .scene-card time {
   color: var(--gold);
-  font-weight: 700;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
 .scene-card h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 22px;
+  line-height: 1.14;
 }
 
 .scene-card p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.45;
+  line-height: 1.55;
 }
 
 .scene-meta {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 6px 10px;
-  align-items: baseline;
-  margin-top: 4px;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(246, 240, 232, 0.12);
+  border-radius: 8px;
+  background: rgba(246, 240, 232, 0.05);
 }
 
 .scene-meta span {
@@ -307,27 +306,23 @@ h2 {
   text-transform: uppercase;
 }
 
-.scene-meta strong {
-  font-size: 13px;
-}
-
 .legend {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   margin-top: auto;
   color: var(--muted);
   font-size: 13px;
 }
 
 .legend span {
-  display: inline-flex;
-  gap: 8px;
+  display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .legend i {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
 }
 
@@ -442,7 +437,9 @@ h2 {
 }
 
 #timeSlider {
-  width: 100%;
+  --thumb-size: 20px;
+  width: calc(100% - var(--thumb-size));
+  margin: 0 calc(var(--thumb-size) / 2);
   height: 8px;
   border-radius: 999px;
   appearance: none;
@@ -474,25 +471,42 @@ h2 {
 .ticks {
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 6px;
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  gap: 0;
   color: var(--muted);
   font-size: 11px;
 }
 
 .ticks button {
   min-width: 0;
-  padding: 6px 4px;
-  border: 1px solid rgba(246, 240, 232, 0.1);
-  border-radius: 6px;
+  padding: 8px 0 0;
+  border: 0;
   color: inherit;
-  background: rgba(246,240,232,0.03);
+  background: transparent;
   cursor: pointer;
   text-align: center;
+  position: relative;
+}
+
+.ticks button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 7px;
+  transform: translateX(-50%);
+  background: rgba(246, 240, 232, 0.28);
 }
 
 .ticks button.is-active {
   color: var(--ink);
   font-weight: 800;
+}
+
+.ticks button.is-active::before {
+  background: var(--accent-2);
 }
 
 @media (max-width: 940px) {
