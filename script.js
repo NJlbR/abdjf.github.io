@@ -53,6 +53,27 @@ const mapImage = new Image();
 mapImage.src = "assets/world-map.jpg";
 const riderImage = new Image();
 riderImage.src = "assets/player-knight.png";
+let riderProcessed = null;
+
+function buildTransparentRider() {
+  if (!(riderImage.complete && riderImage.naturalWidth > 0)) return;
+  const off = document.createElement("canvas");
+  off.width = riderImage.naturalWidth;
+  off.height = riderImage.naturalHeight;
+  const octx = off.getContext("2d");
+  octx.drawImage(riderImage, 0, 0);
+  const img = octx.getImageData(0, 0, off.width, off.height);
+  const d = img.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const r = d[i], g = d[i + 1], b = d[i + 2];
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const sat = max === 0 ? 0 : (max - min) / max;
+    const bright = (r + g + b) / 3;
+    if (bright > 180 && sat < 0.16) d[i + 3] = 0;
+  }
+  octx.putImageData(img, 0, 0);
+  riderProcessed = off;
+}
 
 let sceneIndex = 0;
 let previousSceneIndex = 0;
@@ -134,9 +155,10 @@ function getModelPosition() {
 function drawKnight() {
   const pos = getModelPosition();
   ctx.save(); ctx.translate(pos.x, pos.y); ctx.rotate(pos.angle);
-  if (riderImage.complete && riderImage.naturalWidth > 0) {
-    const h = 98; const w = (riderImage.naturalWidth / riderImage.naturalHeight) * h;
-    ctx.drawImage(riderImage, -w / 2, -h / 2, w, h);
+  const sprite = riderProcessed || riderImage;
+  if (sprite && sprite.width > 0) {
+    const h = 98; const w = (sprite.width / sprite.height) * h;
+    ctx.drawImage(sprite, -w / 2, -h / 2, w, h);
   } else {
     ctx.fillStyle = "rgba(239, 228, 207, 0.92)"; ctx.beginPath(); ctx.arc(0, -10, 8, 0, Math.PI * 2); ctx.fill();
   }
@@ -177,6 +199,8 @@ function buildTicks() {
     const button = document.createElement("button");
     button.type = "button"; button.textContent = `${index + 1}`;
     button.title = `${scene.time} — ${scene.title}`;
+    button.style.setProperty("--i", index);
+    button.style.setProperty("--count", scenes.length - 1);
     button.addEventListener("click", () => setScene(index));
     ticks.appendChild(button);
   });
@@ -212,7 +236,7 @@ prevScene.addEventListener("click", () => setScene(sceneIndex - 1));
 nextScene.addEventListener("click", () => setScene(sceneIndex + 1));
 window.addEventListener("resize", resizeCanvas);
 mapImage.addEventListener("load", startRenderLoop);
-riderImage.addEventListener("load", startRenderLoop);
+riderImage.addEventListener("load", () => { buildTransparentRider(); startRenderLoop(); });
 
 buildTicks();
 renderScene();
